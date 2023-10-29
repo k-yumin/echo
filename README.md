@@ -48,3 +48,18 @@ git clone https://github.com/k-yumin/echo.git
 #### (Optional) GPU 메모리가 6GB 이상인 경우
  - [NSF-HiFiGAN 체크포인트 다운로드](https://github.com/MLo7Ghinsan/MLo7_Diff-SVC_models/releases/download/diff-svc-necessary-checkpoints/nsf_hifigan.zip)
  - 압축 해제 후 checkpoints 폴더 안으로 이동
+
+## 런타임 에러 해결 방법
+```bash
+Traceback (most recent call last):
+  (...)
+  File "(...)/torch/functional.py", line 641, in stft
+    return _VF.stft(input, n_fft, hop_length, win_length, window,  # type: ignore[attr-defined]
+RuntimeError: stft requires the return_complex parameter be given for real inputs, and will further require that return_complex=True in a future PyTorch release.
+```
+ - binarize.py 실행 중 다음과 같은 런타임 에러가 발생했을 경우, 프롬포트에 있는 (...)/torch/functional.py 파일의 line 641에 다음 코드를 추가한다.
+```python
+    if not return_complex:
+        return torch.view_as_real(_VF.stft(input, n_fft, hop_length, win_length, window,  # type: ignore[attr-defined]
+            normalized, onesided, return_complex=True))
+```
