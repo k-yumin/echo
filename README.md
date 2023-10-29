@@ -28,3 +28,11 @@ sudo apt install ffmpeg
 sudo apt install git
 git clone https://github.com/k-yumin/echo.git
 ```
+
+### 4. Pre-trained 모델 다운로드
+ - [Hubert 체크포인트 다운로드](https://mega.nz/folder/AstwSTjC#GfRANHw8AuuNnveTEVcHdg)
+ - 압축 해제 후 checkpoints 폴더를 diff-svc 폴더 안으로 이동
+
+#### (Optional) GPU 메모리가 6GB 이상인 경우
+ - [NSF-HiFiGAN 체크포인트 다운로드](https://github.com/MLo7Ghinsan/MLo7_Diff-SVC_models/releases/download/diff-svc-necessary-checkpoints/nsf_hifigan.zip)
+ - 압축 해제 후 checkpoints 폴더 안으로 이동
