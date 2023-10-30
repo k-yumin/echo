@@ -12,8 +12,8 @@
 |GPU|GeForce GTX 1050 Ti|GeForce RTX 2070|
 |[VRAM](https://en.wikipedia.org/wiki/Video_random-access_memory)|4GB|8GB|
 
-### 1. Python 3.9 설치
- - https://www.python.org/downloads/release/python-390/
+### 1. Python 3.10.12 설치
+ - https://www.python.org/downloads/release/python-31012/
 
 ### 2. CUDA Toolkit 11.8 설치
  - https://developer.nvidia.com/cuda-11-8-0-download-archive
