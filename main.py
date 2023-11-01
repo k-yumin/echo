@@ -1,14 +1,8 @@
-import os
 import streamlit as st
 from gtts import gTTS
 
 
 def main():
-    # check if it is first run.
-    if os.path.exists('first'):
-        first()
-        os.remove('first')
-
     # title
     st.title('에코')
 
@@ -32,15 +26,6 @@ def main():
         st.header(tab_titles[1])
         uploader_msg = '학습을 위한 목소리 녹음 파일을 업로드해주세요. 총 분량이 1시간 이상이어야 합니다.'
         voice_files = st.file_uploader(uploader_msg, accept_multiple_files=True)
-
-
-def first():
-    first_msg = '프로그램을 실행하기 위한 환경을 준비 중입니다. 10분 이상 소요됩니다. 프로그램을 종료하지 마세요.'
-    print(first_msg)
-
-    os.system('pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 '
-              '--index-url https://download.pytorch.org/whl/cu118')
-    os.system('pip install -r requirements.txt')
 
 
 def infer(text):
