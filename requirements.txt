@@ -13,3 +13,6 @@ pytorch_lightning
 pyyaml
 tensorboard
 pydub
+streamlit
+resemblyzer
+gTTS
