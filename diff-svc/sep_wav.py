@@ -73,20 +73,20 @@ def extract_voice(
 
 
 
-def mp4_to_wav(input_dir:str, input_file: str):
-    """mp4파일을 wav형식으로 변환합니다.
+def m4a_to_wav(input_dir:str, input_file: str):
+    """m4a파일을 wav형식으로 변환합니다.
 
     Args:
-        input_dir (str) : 입력 mp4파일의 path
-        input_file (str) : 입력 mp4파일의 이름
+        input_dir (str) : 입력 m4a파일의 path
+        input_file (str) : 입력 m4a파일의 이름
     """
 
     ext = os.path.splitext(input_file)[1][1:]
 
-    if ext != "mp4":
+    if ext != "m4a":
         return 
     else :
-        track = AudioSegment.from_file(os.path.join(input_dir,input_file),  format= 'mp4')
+        track = AudioSegment.from_file(os.path.join(input_dir,input_file),  format= 'm4a')
         track.export(os.path.join(input_dir,os.path.splitext(input_file)[0]+".wav"), format='wav')
 
 
@@ -154,8 +154,8 @@ def main(input_dir: str, output_dir: str, split_sil: bool = False, use_preproces
         use_extract (bool, optional): 노래가 섞인 오디오에서 목소리만 추출합니다. Defaults to True
     """
 
-    for filename in tqdm(os.listdir(input_dir), desc="mp4 to wav 변환 작업 중..."):
-        mp4_to_wav(input_dir,filename)
+    for filename in tqdm(os.listdir(input_dir), desc="m4a to wav 변환 작업 중..."):
+        m4a_to_wav(input_dir,filename)
 
     filepaths = get_audiofiles(input_dir)
 
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     split_sil = False
     use_preprocessing = True # for set samplerate to 44100, channel to mono
     use_norm = True
-    use_extract = True
+    use_extract = False
 
     main(
         input_dir=input_dir,
