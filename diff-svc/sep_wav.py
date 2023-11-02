@@ -174,7 +174,7 @@ def main(input_dir: str, output_dir: str, split_sil: bool = False, use_preproces
         filepaths = get_audiofiles(output_norm_dir)
 
     for filepath in tqdm(filepaths, desc="음원 자르는 중..."):
-        duration = librosa.get_duration(filename=filepath)
+        duration = librosa.get_duration(path=filepath)
         max_last_seg_duration = 0
         sep_duration_final = 15
         sep_duration = 15
