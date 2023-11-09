@@ -1,8 +1,10 @@
 import os
+import shutil
 import streamlit as st
 from gtts import gTTS
 
 nsf_hifigan = False
+config_path = ''
 
 def main():
     # title
@@ -30,11 +32,11 @@ def main():
         
         # infer button
         if st.button('음성 생성하기'):
-            st.write('음성 생성 중..')
-            infer(text)
+            st.write('음성 생성 중...')
+            infer(model_option, text)
 
             # get result
-            inferred_audio = open('diff-svc/results/test_output.wav', 'rb') # TODO
+            inferred_audio = open('diff-svc/results/speech.wav', 'rb') # TODO
             st.audio(inferred_audio.read(), format='audio/wav')
             st.success('음성 생성 완료!')
 
@@ -51,19 +53,51 @@ def main():
 
         # train button
         if st.button('모델 학습하기'):
-            st.write('모델 학습 중..')
+            st.write('모델 학습 중...')
             train(model_name, voice_files)
 
 
-def infer(text):
+def infer(model_name, text):
     tts = gTTS(text, lang='ko')
-    tts.save('workspace/tts.wav')
-    # TODO
+    tts.save('diff-svc/raw/text.wav')
+
+    try:
+        os.remove('diff-svc/infer_.py')
+    except FileNotFoundError:
+        pass
+
+    with open('diff-svc/infer.py', 'rt') as fin:
+        with open('diff-svc/infer_.py', 'wt') as fout:
+            for line in fin:
+                fout.write(line.replace('test', model_name))
+
+    os.chdir('diff-svc')
+    os.system('python infer_.py')
 
 
 def train(model_name, voice_files):
-    pass
-    # TODO
+    presets = f"""raw_data_dir: diff-svc/preprocess_out/final
+        binary_data_dir: diff-svc/data/binary/{model_name}
+        speaker_id: {model_name}
+        work_dir: diff-svc/checkpoints/{model_name}
+        max_sentences: 10
+        use_amp: true"""
+    
+    config_type = 'config_nsf.yaml' if nsf_hifigan else 'config.yaml'
+    
+    src = 'workspace/'+config_type
+    config_path = 'diff-svc/training/'+config_type
+    shutil.copy(src, config_path)
+
+    with open(config_path,'r+') as c:
+        content = f.read()
+        f.seek(0, 0)
+        f.write(presets.rstrip('\r\n') + '\n' + content)
+
+    os.chdir('diff-svc')
+    os.system('python sep_wav.py')
+    os.system(f'python preprocessing/binarize.py --config {config_path}')
+    os.system(f'CUDA_VISIBLE_DEVICES=0 python run.py --config {config_path} --exp_name {model_name} --reset')
 
 
 if __name__ == '__main__':
