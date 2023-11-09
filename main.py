@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 import streamlit as st
 from gtts import gTTS
 
@@ -51,10 +52,18 @@ def main():
         uploader_msg = '학습을 위한 목소리 녹음 파일을 업로드해주세요. 총 분량이 1시간 이상이어야 합니다.'
         voice_files = st.file_uploader(uploader_msg, accept_multiple_files=True)
 
+        col1, col2 = st.columns([.21, 1])
+        
         # train button
-        if st.button('모델 학습하기'):
-            st.write('모델 학습 중...')
-            train(model_name, voice_files)
+        with col1:
+            if st.button('모델 학습하기'):
+                st.write('모델 학습 중...')
+                train(model_name, voice_files)
+        # open tensorboard button
+        with col2:
+            if st.button('TensorBoard 열기'):
+                st.success('포트 6006에서 TensorBoard가 성공적으로 열렸습니다!')
+                open_tensorboard(model_name)
 
 
 def infer(model_name, text):
@@ -99,6 +108,11 @@ def train(model_name, voice_files):
     os.system('python sep_wav.py')
     os.system(f'python preprocessing/binarize.py --config {config_path}')
     os.system(f'CUDA_VISIBLE_DEVICES=0 python run.py --config {config_path} --exp_name {model_name} --reset')
+
+
+def open_tensorboard(model_name):
+    subprocess.run(['tensorboard', '--load_fast=true', '--reload_interval=1', '--reload_multifile=true',
+        f'--logdir=diff-svc/checkpoints/{model_name}/lightning_logs', '--port=6006'])
 
 
 if __name__ == '__main__':
