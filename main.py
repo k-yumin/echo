@@ -73,6 +73,7 @@ def infer(model_name, text):
 
     os.chdir('diff-svc')
     os.system('python infer_.py')
+    os.chdir('..')
 
 
 def train(model_name, voice_files):
