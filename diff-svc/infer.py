@@ -11,7 +11,7 @@ from infer_tools import slicer
 from infer_tools.infer_tool import Svc
 from utils.hparams import hparams
 
-chunks_dict = infer_tool.read_temp("./infer_tools/new_chunks_temp.json")
+chunks_dict = infer_tool.read_temp("./diff-svc/infer_tools/new_chunks_temp.json")
 
 
 def run_clip(svc_model, key, acc, use_pe, use_crepe, thre, use_gt_mel, add_noise_step, project_name='', f_name=None,
@@ -19,7 +19,7 @@ def run_clip(svc_model, key, acc, use_pe, use_crepe, thre, use_gt_mel, add_noise
     print(f'code version:2022-12-04')
     use_pe = use_pe if hparams['audio_sample_rate'] == 24000 else False
     if file_path is None:
-        raw_audio_path = f"./raw/{f_name}"
+        raw_audio_path = f"./diff-svc/raw/{f_name}"
         clean_name = f_name[:-4]
     else:
         raw_audio_path = file_path
@@ -35,7 +35,7 @@ def run_clip(svc_model, key, acc, use_pe, use_crepe, thre, use_gt_mel, add_noise
     else:
         chunks = slicer.cut(wav_path, db_thresh=slice_db)
     chunks_dict[wav_hash] = {"chunks": chunks, "time": int(time.time())}
-    infer_tool.write_temp("./infer_tools/new_chunks_temp.json", chunks_dict)
+    infer_tool.write_temp("./diff-svc/infer_tools/new_chunks_temp.json", chunks_dict)
     audio_data, audio_sr = slicer.chunks2audio(wav_path, chunks)
 
     count = 0
@@ -66,7 +66,7 @@ def run_clip(svc_model, key, acc, use_pe, use_crepe, thre, use_gt_mel, add_noise
         audio.extend(list(fix_audio))
         count += 1
     if out_path is None:
-        out_path = f'./results/{clean_name}_{key}key_{project_name}_{hparams["residual_channels"]}_{hparams["residual_layers"]}_{int(step / 1000)}k_{accelerate}x.{kwargs["format"]}'
+        out_path = f'./diff-svc/results/{clean_name}_{project_name}_{hparams["residual_channels"]}_{hparams["residual_layers"]}_{int(step / 1000)}k_{accelerate}x.{kwargs["format"]}'
     soundfile.write(out_path, audio, hparams["audio_sample_rate"], 'PCM_16',format=out_path.split('.')[-1])
     return np.array(f0_tst), np.array(f0_pred), audio
 
@@ -74,11 +74,11 @@ def run_clip(svc_model, key, acc, use_pe, use_crepe, thre, use_gt_mel, add_noise
 if __name__ == '__main__':
     # Project folder name used for training
     project_name = "test"
-    model_path = f'./checkpoints/{project_name}/model_ckpt_steps_246000.ckpt' # change ckpt file name to your best ckpt file name
-    config_path = f'./checkpoints/{project_name}/config.yaml'
+    model_path = f'./diff-svc/checkpoints/{project_name}/model_ckpt_steps_70000.ckpt' # change ckpt file name to your best ckpt file name
+    config_path = f'./diff-svc/checkpoints/{project_name}/config.yaml'
 
     # Support multiple wav/ogg files, put them in the raw folder, with extension
-    file_names = ["test.wav"]
+    file_names = ["text.wav"]
     trans = [0] # Pitch adjustment, 
                 # support positive and negative (semitones), 
                 # the number corresponds to the previous line, 
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # Acceleration factor
     accelerate = 20
     hubert_gpu = True
-    format='flac'
+    format='wav'
     step = int(model_path.split("_")[-1].split(".")[0])
 
     # don't move below
