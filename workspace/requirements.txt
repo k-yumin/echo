@@ -14,5 +14,6 @@ pyyaml
 tensorboard
 pydub
 streamlit
+streamlit-audiorec
 resemblyzer
 gTTS
