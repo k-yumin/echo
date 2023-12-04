@@ -1,5 +1,5 @@
 # 에코 (ECHO)
-- 제24회 충북컴퓨터꿈나무축제 고등학교 공모전(SW제작) 부문 출품작
+- 제24회 충북컴퓨터꿈나무축제 고등학교 공모전(SW제작) **대상** 수상작
 
 ## 작품 소개
 - **이 서비스는 [Diff-SVC](https://github.com/prophesier/diff-svc) 프로젝트를 기반으로 제작되었습니다.**
@@ -15,8 +15,8 @@
 |GPU|GeForce GTX 1050 Ti|GeForce RTX 2070|
 |[VRAM](https://en.wikipedia.org/wiki/Video_random-access_memory)|4GB|8GB|
 
-### 1. Python 3.10.12 설치
- - https://www.python.org/downloads/release/python-31012/
+### 1. Python 3.10.11 설치
+ - https://www.python.org/downloads/release/python-31011/
 
 ### 2. CUDA Toolkit 11.8 설치
  - https://developer.nvidia.com/cuda-11-8-0-download-archive
@@ -73,7 +73,7 @@ Traceback (most recent call last):
     return _VF.stft(input, n_fft, hop_length, win_length, window,  # type: ignore[attr-defined]
 RuntimeError: stft requires the return_complex parameter be given for real inputs, and will further require that return_complex=True in a future PyTorch release.
 ```
- - 모델 학습 중 다음과 같은 런타임 에러가 발생했을 경우, 프롬포트에 있는 (...)/torch/functional.py 파일의 line 641에 다음 코드를 추가한다.
+ - 모델 학습 중 다음과 같은 런타임 에러가 발생했을 경우, 프롬포트에 출력된 경로 (...)/torch/functional.py 파일의 641번째 줄에 다음 코드를 추가한다.
 ```python
     if not return_complex:
         return torch.view_as_real(_VF.stft(input, n_fft, hop_length, win_length, window,  # type: ignore[attr-defined]
