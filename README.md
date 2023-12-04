@@ -27,7 +27,7 @@
   - https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z
   - 압축 해제 후 bin 폴더를 환경 변수에 추가
 
-#### Linux
+#### Debian / Ubuntu
 ```bash
 sudo apt update
 sudo apt install ffmpeg
@@ -38,7 +38,7 @@ sudo apt install ffmpeg
 #### Windows
  - https://github.com/k-yumin/echo/archive/refs/heads/main.zip
 
-#### Linux
+#### Debian / Ubuntu
 ```bash
 sudo apt install git
 git clone https://github.com/k-yumin/echo.git
@@ -60,7 +60,7 @@ git clone https://github.com/k-yumin/echo.git
 #### Windows
  - ```run.bat``` 실행
 
-#### Linux
+#### Debian / Ubuntu
 ```bash
 ./run.sh
 ```
